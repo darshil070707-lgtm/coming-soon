@@ -755,7 +755,10 @@
 
         setTimeout(typeT, 1400);
 
-        /* ======== EMAIL SUBSCRIBE ======== */
+        /* ======== EMAIL SUBSCRIBE → GOOGLE SHEETS ======== */
+        // REPLACE this URL with your deployed Google Apps Script web app URL
+        const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyP3XLNV3d4pzvTftTpmbNfcSxuMgfpLokHzyhhuBnOAf4-OFegcyRd8qTq3CDnmCIz/exec';
+
         const form = document.getElementById('subscribeForm');
         const inp = document.getElementById('emailInput');
         const btn = document.getElementById('submitBtn');
@@ -772,15 +775,15 @@
             }
             btn.disabled = true;
             btn.textContent = 'Joining...';
-            setTimeout(() => {
-                const list = JSON.parse(localStorage.getItem('nexus_waitlist') || '[]');
-                if (list.includes(email)) {
-                    msg.textContent = "You're already on the list.";
-                } else {
-                    list.push(email);
-                    localStorage.setItem('nexus_waitlist', JSON.stringify(list));
-                    msg.textContent = "You're in. We'll send the signal.";
-                }
+
+            fetch(SHEETS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, timestamp: new Date().toISOString() })
+            })
+            .then(() => {
+                msg.textContent = "You're in. We'll send the signal.";
                 msg.className = 'form-message success';
                 btn.textContent = '\u2713 On the list';
                 btn.classList.add('success');
@@ -790,7 +793,13 @@
                     btn.textContent = 'Join Waitlist';
                     btn.classList.remove('success');
                 }, 3000);
-            }, 700);
+            })
+            .catch(() => {
+                msg.textContent = 'Something went wrong. Try again.';
+                msg.className = 'form-message error';
+                btn.disabled = false;
+                btn.textContent = 'Join Waitlist';
+            });
         });
     </script>
 </body>
