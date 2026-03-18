@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Something Big is Coming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --accent-cyan: #00f0ff;
+            --accent-purple: #a855f7;
+            --accent-blue: #3b82f6;
+            --accent-pink: #ec4899;
+            --text-primary: #f0f0f5;
+            --text-secondary: #8888a0;
+            --text-dim: #55556a;
+            --glow-cyan: rgba(0, 240, 255, 0.15);
+            --glow-purple: rgba(168, 85, 247, 0.15);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ---- Animated Background ---- */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        .bg-orbs {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: orbFloat 15s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, var(--accent-cyan), transparent 70%);
+            top: -10%; left: -5%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, var(--accent-purple), transparent 70%);
+            top: 40%; right: -10%;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, var(--accent-blue), transparent 70%);
+            bottom: -5%; left: 30%;
+            animation-delay: -10s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -40px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(40px, 30px) scale(1.02); }
+        }
+
+        /* ---- Canvas for particles ---- */
+        #particleCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* ---- Main Content ---- */
+        .content {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* ---- Top Badge ---- */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 100px;
+            background: rgba(0, 240, 255, 0.06);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent-cyan);
+            margin-bottom: 2.5rem;
+            animation: fadeInDown 1s ease-out 0.2s backwards;
+        }
+
+        .badge-dot {
+            width: 6px; height: 6px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.4); }
+            50% { opacity: 0.6; box-shadow: 0 0 0 8px rgba(0, 240, 255, 0); }
+        }
+
+        /* ---- Headline ---- */
+        .headline {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out 0.4s backwards;
+        }
+
+        .headline h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+        }
+
+        .headline h1 .line-1 {
+            display: block;
+            color: var(--text-primary);
+        }
+
+        .headline h1 .line-2 {
+            display: block;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .headline h1 .line-3 {
+            display: block;
+            color: var(--text-primary);
+        }
+
+        /* ---- Rotating Words ---- */
+        .rotating-wrapper {
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            vertical-align: bottom;
+            height: 1.1em;
+            min-width: 280px;
+        }
+
+        .rotating-word {
+            display: block;
+            position: absolute;
+            width: 100%;
+            left: 0;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .rotating-word.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .rotating-word.exit {
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+
+        /* ---- Subtext ---- */
+        .subtext {
+            text-align: center;
+            max-width: 600px;
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+        }
+
+        .subtext strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ---- Feature Pills ---- */
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 3.5rem;
+            animation: fadeInUp 1s ease-out 0.8s backwards;
+        }
+
+        .feature-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-pill:hover {
+            border-color: rgba(0, 240, 255, 0.2);
+            background: rgba(0, 240, 255, 0.04);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .feature-pill .icon {
+            font-size: 1.1rem;
+        }
+
+        /* ---- Email Form ---- */
+        .subscribe-section {
+            text-align: center;
+            animation: fadeInUp 1s ease-out 1s backwards;
+        }
+
+        .subscribe-section .label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .email-form {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            max-width: 480px;
+            margin: 0 auto;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .email-form:focus-within {
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.08);
+        }
+
+        .email-form input[type="email"] {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 14px 18px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .email-form input[type="email"]::placeholder {
+            color: var(--text-dim);
+        }
+
+        .email-form button {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+        }
+
+        .email-form button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+        }
+
+        .email-form button:active {
+            transform: scale(0.98);
+        }
+
+        .email-form button.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .form-note {
+            margin-top: 0.8rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .form-message {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            min-height: 1.5em;
+        }
+
+        .form-message.success { color: #10b981; }
+        .form-message.error { color: #ef4444; }
+
+        /* ---- Typing Terminal ---- */
+        .terminal {
+            margin-top: 4rem;
+            max-width: 600px;
+            width: 100%;
+            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            animation: fadeInUp 1s ease-out 1.2s backwards;
+            backdrop-filter: blur(20px);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .terminal-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27c93f; }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            min-height: 160px;
+        }
+
+        .terminal-body .prompt {
+            color: var(--accent-cyan);
+        }
+
+        .terminal-body .command {
+            color: var(--text-primary);
+        }
+
+        .terminal-body .output {
+            color: var(--accent-purple);
+        }
+
+        .terminal-body .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1.1em;
+            background: var(--accent-cyan);
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* ---- Footer ---- */
+        .footer {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 3rem 2rem 2rem;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+        }
+
+        /* ---- Animations ---- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 640px) {
+            .email-form {
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px;
+            }
+
+            .email-form input[type="email"] {
+                text-align: center;
+            }
+
+            .email-form button {
+                width: 100%;
+            }
+
+            .features {
+                gap: 8px;
+            }
+
+            .feature-pill {
+                font-size: 0.8rem;
+                padding: 8px 14px;
+            }
+
+            .terminal {
+                margin-top: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background layers -->
+    <div class="bg-grid"></div>
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Main Content -->
+    <main class="content">
+        <div class="badge">
+            <span class="badge-dot"></span>
+            <span>Building in stealth</span>
+        </div>
+
+        <div class="headline">
+            <h1>
+                <span class="line-1">Intelligence that's</span>
+                <span class="line-2">
+                    <span class="rotating-wrapper">
+                        <span class="rotating-word active">Proactive</span>
+                        <span class="rotating-word">Context-Aware</span>
+                        <span class="rotating-word">Business-Connected</span>
+                        <span class="rotating-word">Lightning Fast</span>
+                        <span class="rotating-word">Always Watching</span>
+                    </span>
+                </span>
+                <span class="line-3">not just reactive.</span>
+            </h1>
+        </div>
+
+        <p class="subtext">
+            Where <strong>tech meets business</strong> in real-time &mdash; an AI-native platform that 
+            switches context in a blink, connects the dots across your stack, 
+            and <strong>lifts the entire game</strong>.
+        </p>
+
+        <div class="features">
+            <div class="feature-pill"><span class="icon">&#9889;</span> Instant Context Switching</div>
+            <div class="feature-pill"><span class="icon">&#129504;</span> AI-Native Intelligence</div>
+            <div class="feature-pill"><span class="icon">&#128279;</span> Tech &#8596; Business Bridge</div>
+            <div class="feature-pill"><span class="icon">&#128737;&#65039;</span> Proactive, Not Reactive</div>
+            <div class="feature-pill"><span class="icon">&#128225;</span> Real-Time Observability</div>
+        </div>
+
+        <div class="subscribe-section">
+            <p class="label">Be the first to know</p>
+            <form class="email-form" id="subscribeForm">
+                <input 
+                    type="email" 
+                    id="emailInput"
+                    placeholder="Enter your email" 
+                    required
+                    autocomplete="email"
+                    aria-label="Email address"
+                >
+                <button type="submit" id="submitBtn">Notify Me</button>
+            </form>
+            <p class="form-note">No spam, ever. Just the launch signal.</p>
+            <p class="form-message" id="formMessage"></p>
+        </div>
+
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-dot red"></div>
+                <div class="terminal-dot yellow"></div>
+                <div class="terminal-dot green"></div>
+                <span class="terminal-title">console</span>
+            </div>
+            <div class="terminal-body" id="terminalBody">
+                <span class="cursor"></span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        &copy; 2026 &middot; Something extraordinary is being forged.
+    </footer>
+
+    <script>
+        // ---- Particle System ----
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const PARTICLE_COUNT = 60;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+                this.radius = Math.random() * 1.5 + 0.5;
+                this.opacity = Math.random() * 0.3 + 0.1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 240, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            particles.push(new Particle());
+        }
+
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.06 * (1 - dist / 150)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            drawConnections();
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ---- Rotating Words ----
+        const words = document.querySelectorAll('.rotating-word');
+        let currentWord = 0;
+        setInterval(() => {
+            words[currentWord].classList.remove('active');
+            words[currentWord].classList.add('exit');
+            setTimeout(() => {
+                words[currentWord].classList.remove('exit');
+                currentWord = (currentWord + 1) % words.length;
+                words[currentWord].classList.add('active');
+            }, 400);
+        }, 2500);
+
+        // ---- Terminal Typing Effect ----
+        const terminalLines = [
+            { type: 'prompt', text: '~ ' },
+            { type: 'command', text: 'init --mode=intelligent' },
+            { type: 'newline' },
+            { type: 'output', text: '\u2713 Neural context engine loaded' },
+            { type: 'newline' },
+            { type: 'output', text: '\u2713 Business-tech bridge established' },
+            { type: 'newline' },
+            { type: 'output', text: '\u2713 Proactive monitoring: ARMED' },
+            { type: 'newline' },
+            { type: 'output', text: '\u2713 Context switch latency: <50ms' },
+            { type: 'newline' },
+            { type: 'newline' },
+            { type: 'prompt', text: '~ ' },
+            { type: 'command', text: 'status' },
+            { type: 'newline' },
+            { type: 'output', text: '\u26A1 All systems nominal. Waiting for launch.' },
+            { type: 'newline' },
+            { type: 'output', text: '\uD83D\uDE80 ETA: Coming Soon...' },
+        ];
+
+        const terminalBody = document.getElementById('terminalBody');
+        let lineIndex = 0;
+        let charIndex = 0;
+
+        function typeTerminal() {
+            if (lineIndex >= terminalLines.length) {
+                const cursor = document.createElement('span');
+                cursor.className = 'cursor';
+                terminalBody.appendChild(cursor);
+                return;
+            }
+
+            const line = terminalLines[lineIndex];
+
+            if (line.type === 'newline') {
+                removeCursor();
+                terminalBody.appendChild(document.createElement('br'));
+                lineIndex++;
+                charIndex = 0;
+                setTimeout(typeTerminal, 100);
+                return;
+            }
+
+            if (charIndex === 0) {
+                removeCursor();
+                const span = document.createElement('span');
+                span.className = line.type;
+                span.id = 'line-' + lineIndex;
+                terminalBody.appendChild(span);
+            }
+
+            const span = document.getElementById('line-' + lineIndex);
+            if (charIndex < line.text.length) {
+                span.textContent += line.text[charIndex];
+                charIndex++;
+                const speed = line.type === 'command' ? 45 : 15;
+                removeCursor();
+                const cursor = document.createElement('span');
+                cursor.className = 'cursor';
+                terminalBody.appendChild(cursor);
+                setTimeout(typeTerminal, speed);
+            } else {
+                lineIndex++;
+                charIndex = 0;
+                setTimeout(typeTerminal, line.type === 'command' ? 400 : 80);
+            }
+        }
+
+        function removeCursor() {
+            const existing = terminalBody.querySelector('.cursor');
+            if (existing) existing.remove();
+        }
+
+        setTimeout(typeTerminal, 1500);
+
+        // ---- Email Subscription ----
+        const form = document.getElementById('subscribeForm');
+        const emailInput = document.getElementById('emailInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const formMessage = document.getElementById('formMessage');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            if (!email) return;
+
+            // Basic email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                formMessage.textContent = 'Please enter a valid email address.';
+                formMessage.className = 'form-message error';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Subscribing...';
+
+            setTimeout(() => {
+                // Store locally (replace with your backend API in production)
+                const subscribers = JSON.parse(localStorage.getItem('launch_subscribers') || '[]');
+                if (subscribers.includes(email)) {
+                    formMessage.textContent = "You're already on the list! We'll be in touch.";
+                    formMessage.className = 'form-message success';
+                } else {
+                    subscribers.push(email);
+                    localStorage.setItem('launch_subscribers', JSON.stringify(subscribers));
+                    formMessage.textContent = "You're in! We'll notify you when we launch.";
+                    formMessage.className = 'form-message success';
+                }
+
+                submitBtn.textContent = '\u2713 Subscribed';
+                submitBtn.classList.add('success');
+                emailInput.value = '';
+
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Notify Me';
+                    submitBtn.classList.remove('success');
+                }, 3000);
+            }, 800);
+        });
+    </script>
+</body>
+</html>
