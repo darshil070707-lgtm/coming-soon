@@ -756,7 +756,6 @@
         setTimeout(typeT, 1400);
 
         /* ======== EMAIL SUBSCRIBE → GOOGLE SHEETS ======== */
-        // REPLACE this URL with your deployed Google Apps Script web app URL
         const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyP3XLNV3d4pzvTftTpmbNfcSxuMgfpLokHzyhhuBnOAf4-OFegcyRd8qTq3CDnmCIz/exec';
 
         const form = document.getElementById('subscribeForm');
@@ -776,12 +775,9 @@
             btn.disabled = true;
             btn.textContent = 'Joining...';
 
-            fetch(SHEETS_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: email, timestamp: new Date().toISOString() })
-            })
+            const url = SHEETS_URL + '?email=' + encodeURIComponent(email) + '&timestamp=' + encodeURIComponent(new Date().toISOString());
+
+            fetch(url, { method: 'GET', mode: 'no-cors' })
             .then(() => {
                 msg.textContent = "You're in. We'll send the signal.";
                 msg.className = 'form-message success';
