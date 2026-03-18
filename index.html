@@ -3,171 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Nexus &mdash; Something is Coming</title>
+    <title>The Nexus</title>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #fafaf9;
-            --bg-card: #ffffff;
-            --accent: #18181b;
-            --accent-warm: #d97706;
-            --accent-rose: #e11d48;
-            --accent-violet: #7c3aed;
-            --gradient-warm: linear-gradient(135deg, #f59e0b, #ef4444, #ec4899);
-            --gradient-cool: linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4);
-            --text-primary: #18181b;
-            --text-secondary: #52525b;
-            --text-muted: #a1a1aa;
-            --border: #e4e4e7;
-            --border-hover: #d4d4d8;
+            --bg: #09090b;
+            --surface: rgba(255,255,255,0.03);
+            --surface-hover: rgba(255,255,255,0.06);
+            --glass: rgba(255,255,255,0.04);
+            --glass-border: rgba(255,255,255,0.07);
+            --accent-1: #f97316;
+            --accent-2: #a855f7;
+            --accent-3: #06b6d4;
+            --gradient-main: linear-gradient(135deg, #f97316, #ec4899, #a855f7);
+            --gradient-cool: linear-gradient(135deg, #a855f7, #3b82f6, #06b6d4);
+            --text: #fafafa;
+            --text-2: #a1a1aa;
+            --text-3: #52525b;
+            --border: rgba(255,255,255,0.06);
         }
 
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Sora', -apple-system, sans-serif;
             background: var(--bg);
-            color: var(--text-primary);
+            color: var(--text);
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* ---- Subtle Background ---- */
-        .bg-noise {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        /* ============ BACKGROUND SYSTEM ============ */
+        .bg-mesh {
+            position: fixed; inset: 0; z-index: 0;
             pointer-events: none;
+            overflow: hidden;
         }
 
-        .bg-gradient {
-            position: fixed;
-            top: -30%; right: -20%;
-            width: 700px; height: 700px;
-            background: radial-gradient(circle, rgba(249,115,22,0.06), transparent 70%);
-            z-index: 0;
-            pointer-events: none;
-            animation: driftA 25s ease-in-out infinite;
+        .mesh-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.35;
         }
 
-        .bg-gradient-2 {
-            position: fixed;
-            bottom: -20%; left: -10%;
+        .mesh-orb.o1 {
             width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(124,58,237,0.05), transparent 70%);
-            z-index: 0;
+            background: #f97316;
+            top: -15%; left: -10%;
+            animation: float1 20s ease-in-out infinite;
+        }
+
+        .mesh-orb.o2 {
+            width: 500px; height: 500px;
+            background: #a855f7;
+            top: 50%; right: -15%;
+            animation: float2 25s ease-in-out infinite;
+        }
+
+        .mesh-orb.o3 {
+            width: 450px; height: 450px;
+            background: #06b6d4;
+            bottom: -10%; left: 25%;
+            animation: float3 22s ease-in-out infinite;
+        }
+
+        .mesh-orb.o4 {
+            width: 300px; height: 300px;
+            background: #ec4899;
+            top: 30%; left: 50%;
+            animation: float4 18s ease-in-out infinite;
+        }
+
+        @keyframes float1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(80px,60px) scale(1.1)} 66%{transform:translate(-40px,100px) scale(0.9)} }
+        @keyframes float2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-60px,-80px) scale(0.9)} 66%{transform:translate(40px,-40px) scale(1.1)} }
+        @keyframes float3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(60px,-50px) scale(1.05)} }
+        @keyframes float4 { 0%,100%{transform:translate(0,0) scale(0.8)} 50%{transform:translate(-80px,60px) scale(1)} }
+
+        .bg-grain {
+            position: fixed; inset: 0; z-index: 1;
             pointer-events: none;
-            animation: driftB 30s ease-in-out infinite;
+            opacity: 0.025;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
-        @keyframes driftA {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-40px, 30px); }
-        }
-        @keyframes driftB {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(30px, -40px); }
+        /* ============ CANVAS ============ */
+        #constellation {
+            position: fixed; inset: 0; z-index: 2;
+            pointer-events: none;
         }
 
-        /* ---- Layout ---- */
-        .content {
+        /* ============ LAYOUT ============ */
+        .page {
             position: relative;
-            z-index: 2;
+            z-index: 3;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-            max-width: 720px;
-            margin: 0 auto;
+            padding: 3rem 1.5rem;
         }
 
-        /* ---- Logo Mark ---- */
-        .logo-mark {
-            width: 56px; height: 56px;
-            border-radius: 16px;
-            background: var(--gradient-warm);
+        /* ============ NAV ============ */
+        .topbar {
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 10;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            animation: fadeInDown 0.8s ease-out 0.1s backwards;
-            box-shadow: 0 4px 24px rgba(249, 115, 22, 0.15);
+            padding: 1.2rem 2rem;
+            backdrop-filter: blur(20px) saturate(1.5);
+            -webkit-backdrop-filter: blur(20px) saturate(1.5);
+            background: rgba(9,9,11,0.6);
+            border-bottom: 1px solid var(--border);
         }
 
-        .logo-mark span {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #fff;
+        .topbar-logo {
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .topbar-icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: var(--gradient-main);
+            display: flex; align-items: center; justify-content: center;
             font-family: 'Space Mono', monospace;
+            font-weight: 700; font-size: 0.9rem; color: #fff;
         }
 
-        /* ---- Badge ---- */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 16px;
-            border-radius: 100px;
-            background: #fef3c7;
-            border: 1px solid #fde68a;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.06em;
+        .topbar-name {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .topbar-status {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.7rem;
+            color: var(--text-3);
             text-transform: uppercase;
-            color: #92400e;
-            margin-bottom: 2rem;
-            animation: fadeInDown 0.8s ease-out 0.2s backwards;
+            letter-spacing: 0.1em;
         }
 
-        .badge-dot {
+        .status-dot {
             width: 6px; height: 6px;
-            background: #f59e0b;
             border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
+            background: #22c55e;
+            box-shadow: 0 0 8px rgba(34,197,94,0.5);
+            animation: statusPulse 2s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.3); }
-            50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+        @keyframes statusPulse {
+            0%,100% { opacity: 1; } 50% { opacity: 0.4; }
         }
 
-        /* ---- Headline ---- */
-        .headline {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 0.8s ease-out 0.3s backwards;
+        /* ============ HERO ============ */
+        .hero { text-align: center; max-width: 800px; margin-top: 2rem; }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 20px;
+            border-radius: 100px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent-1);
+            margin-bottom: 2.5rem;
+            animation: slideDown 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s backwards;
         }
 
-        .headline h1 {
-            font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+        .hero h1 {
+            font-size: clamp(2.4rem, 5.5vw, 4.5rem);
             font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            color: var(--text-primary);
+            line-height: 1.08;
+            letter-spacing: -0.035em;
+            margin-bottom: 1.5rem;
+            animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s backwards;
         }
 
-        .headline h1 .gradient-text {
-            background: var(--gradient-warm);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .hero h1 .line { display: block; }
+
+        .rotating-line {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.3em;
+            flex-wrap: nowrap;
         }
 
-        /* ---- Rotating Words ---- */
         .rotating-wrapper {
             display: inline-block;
             position: relative;
             overflow: hidden;
-            vertical-align: bottom;
-            height: 1.15em;
-            min-width: 200px;
+            vertical-align: baseline;
+            height: 1.12em;
+            width: 5.5em;
+            text-align: left;
         }
 
         .rotating-word {
@@ -175,13 +213,13 @@
             position: absolute;
             width: 100%;
             left: 0;
-            background: var(--gradient-cool);
+            background: var(--gradient-main);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             opacity: 0;
-            transform: translateY(100%);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(110%);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .rotating-word.active {
@@ -191,283 +229,324 @@
 
         .rotating-word.exit {
             opacity: 0;
-            transform: translateY(-100%);
+            transform: translateY(-110%);
         }
 
-        /* ---- Subtext ---- */
-        .subtext {
-            text-align: center;
-            max-width: 520px;
-            color: var(--text-secondary);
-            font-size: 1.1rem;
+        .hero-sub {
+            max-width: 480px;
+            margin: 0 auto 3rem;
+            font-size: 1.05rem;
             line-height: 1.75;
+            color: var(--text-2);
             font-weight: 400;
-            margin-bottom: 2.5rem;
-            animation: fadeInUp 0.8s ease-out 0.5s backwards;
+            animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.35s backwards;
         }
 
-        /* ---- Feature Pills ---- */
-        .features {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+        /* ============ FEATURE CHIPS ============ */
+        .chips {
+            display: flex; flex-wrap: wrap; justify-content: center;
             gap: 10px;
             margin-bottom: 3rem;
-            animation: fadeInUp 0.8s ease-out 0.65s backwards;
+            animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.5s backwards;
         }
 
-        .feature-pill {
-            padding: 8px 18px;
+        .chip {
+            padding: 8px 20px;
             border-radius: 100px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            font-size: 0.82rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            font-size: 0.8rem;
             font-weight: 500;
-            color: var(--text-secondary);
-            transition: all 0.25s ease;
+            color: var(--text-2);
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+            cursor: default;
         }
 
-        .feature-pill:hover {
-            border-color: var(--accent-warm);
-            color: var(--text-primary);
-            transform: translateY(-1px);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        .chip:hover {
+            background: var(--surface-hover);
+            border-color: rgba(249,115,22,0.3);
+            color: var(--text);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(249,115,22,0.08);
         }
 
-        /* ---- Email Form ---- */
-        .subscribe-section {
+        /* ============ SUBSCRIBE ============ */
+        .subscribe {
             text-align: center;
             width: 100%;
-            animation: fadeInUp 0.8s ease-out 0.8s backwards;
+            max-width: 500px;
+            animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.65s backwards;
         }
 
-        .subscribe-section .label {
-            font-size: 0.78rem;
-            color: var(--text-muted);
+        .subscribe .lbl {
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.18em;
+            color: var(--text-3);
             font-weight: 600;
             margin-bottom: 1rem;
         }
 
         .email-form {
             display: flex;
-            align-items: center;
-            max-width: 440px;
-            margin: 0 auto;
-            border-radius: 14px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(16px);
             padding: 5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: all 0.35s ease;
         }
 
         .email-form:focus-within {
-            border-color: #d97706;
-            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+            border-color: rgba(249,115,22,0.4);
+            box-shadow: 0 0 0 3px rgba(249,115,22,0.08), 0 8px 40px rgba(0,0,0,0.2);
         }
 
         .email-form input[type="email"] {
             flex: 1;
             background: transparent;
-            border: none;
-            outline: none;
-            padding: 12px 16px;
-            font-size: 0.92rem;
-            color: var(--text-primary);
+            border: none; outline: none;
+            padding: 14px 18px;
+            font-size: 0.9rem;
+            color: var(--text);
             font-family: 'Sora', sans-serif;
         }
 
-        .email-form input[type="email"]::placeholder {
-            color: var(--text-muted);
-        }
+        .email-form input::placeholder { color: var(--text-3); }
 
         .email-form button {
-            padding: 12px 24px;
-            background: var(--text-primary);
+            padding: 14px 28px;
+            background: var(--gradient-main);
             color: #fff;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
             font-family: 'Sora', sans-serif;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
             white-space: nowrap;
         }
 
         .email-form button:hover {
-            background: #3f3f46;
-            transform: scale(1.02);
+            transform: scale(1.04);
+            box-shadow: 0 6px 30px rgba(249,115,22,0.25);
         }
 
-        .email-form button:active {
-            transform: scale(0.98);
-        }
+        .email-form button:active { transform: scale(0.97); }
 
         .email-form button.success {
-            background: #059669;
+            background: linear-gradient(135deg, #10b981, #059669);
         }
 
         .form-note {
-            margin-top: 0.75rem;
-            font-size: 0.72rem;
-            color: var(--text-muted);
+            margin-top: 0.8rem;
+            font-size: 0.68rem;
+            color: var(--text-3);
         }
 
         .form-message {
             margin-top: 0.8rem;
-            font-size: 0.85rem;
-            min-height: 1.5em;
+            font-size: 0.82rem;
+            min-height: 1.4em;
             font-weight: 500;
         }
+        .form-message.success { color: #10b981; }
+        .form-message.error { color: #ef4444; }
 
-        .form-message.success { color: #059669; }
-        .form-message.error { color: #dc2626; }
-
-        /* ---- Animated Phrase Bar ---- */
-        .phrase-bar {
+        /* ============ TERMINAL GLASS CARD ============ */
+        .term-card {
             margin-top: 3.5rem;
             width: 100%;
-            max-width: 520px;
-            border-radius: 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+            max-width: 540px;
+            border-radius: 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(24px) saturate(1.3);
+            -webkit-backdrop-filter: blur(24px) saturate(1.3);
             overflow: hidden;
-            animation: fadeInUp 0.8s ease-out 1s backwards;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.8s backwards;
+            box-shadow: 0 8px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
         }
 
-        .phrase-bar-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 18px;
+        .term-head {
+            display: flex; align-items: center; gap: 8px;
+            padding: 14px 20px;
             border-bottom: 1px solid var(--border);
         }
 
-        .phrase-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-        }
-        .phrase-dot.r { background: #fca5a5; }
-        .phrase-dot.y { background: #fde68a; }
-        .phrase-dot.g { background: #86efac; }
+        .td { width: 10px; height: 10px; border-radius: 50%; }
+        .td.r { background: #ef4444; }
+        .td.y { background: #f59e0b; }
+        .td.g { background: #22c55e; }
 
-        .phrase-bar-title {
-            flex: 1;
-            text-align: center;
+        .term-title {
+            flex: 1; text-align: center;
+            font-family: 'Space Mono', monospace;
             font-size: 0.7rem;
-            color: var(--text-muted);
-            font-family: 'Space Mono', monospace;
-            letter-spacing: 0.05em;
+            color: var(--text-3);
+            letter-spacing: 0.08em;
         }
 
-        .phrase-bar-body {
-            padding: 20px 22px;
+        .term-body {
+            padding: 22px 24px;
             font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            line-height: 1.9;
-            color: var(--text-secondary);
-            min-height: 140px;
+            font-size: 0.78rem;
+            line-height: 2;
+            color: var(--text-2);
+            min-height: 155px;
         }
 
-        .phrase-bar-body .prompt { color: var(--accent-warm); font-weight: 700; }
-        .phrase-bar-body .cmd { color: var(--text-primary); }
-        .phrase-bar-body .out { color: var(--accent-violet); }
-        .phrase-bar-body .cursor {
+        .term-body .p { color: var(--accent-1); font-weight: 700; }
+        .term-body .c { color: var(--text); }
+        .term-body .o { color: var(--accent-2); }
+        .term-body .cursor {
             display: inline-block;
-            width: 8px; height: 1.1em;
-            background: var(--text-primary);
+            width: 8px; height: 1.15em;
+            background: var(--accent-1);
             vertical-align: text-bottom;
+            border-radius: 1px;
             animation: blink 1s step-end infinite;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        /* ============ SOCIAL PROOF ============ */
+        .proof {
+            margin-top: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.95s backwards;
         }
 
-        /* ---- Footer ---- */
-        .footer {
-            position: relative;
-            z-index: 2;
+        .avatar-stack {
+            display: flex;
+        }
+
+        .avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--bg);
+            margin-left: -8px;
+            background: var(--surface);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.65rem; color: var(--text-3);
+            overflow: hidden;
+        }
+
+        .avatar:first-child { margin-left: 0; }
+        .avatar.a1 { background: linear-gradient(135deg, #f97316, #ec4899); }
+        .avatar.a2 { background: linear-gradient(135deg, #a855f7, #3b82f6); }
+        .avatar.a3 { background: linear-gradient(135deg, #06b6d4, #22c55e); }
+        .avatar.plus { background: var(--glass); font-weight: 600; }
+
+        .proof-text {
+            font-size: 0.75rem;
+            color: var(--text-3);
+        }
+
+        .proof-text strong { color: var(--text-2); font-weight: 600; }
+
+        /* ============ FOOTER ============ */
+        .foot {
+            position: relative; z-index: 3;
             text-align: center;
             padding: 3rem 2rem 2rem;
-            color: var(--text-muted);
-            font-size: 0.72rem;
-            letter-spacing: 0.02em;
+            color: var(--text-3);
+            font-size: 0.68rem;
+            letter-spacing: 0.04em;
         }
 
-        /* ---- Animations ---- */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(24px); }
+        /* ============ ANIMATIONS ============ */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-16px); }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ---- Responsive ---- */
+        /* ============ RESPONSIVE ============ */
         @media (max-width: 640px) {
-            .content { padding: 2rem 1.25rem; }
+            .page { padding: 2rem 1.2rem; }
+            .topbar { padding: 1rem 1.2rem; }
             .email-form {
-                flex-direction: column;
-                gap: 6px;
-                padding: 6px;
+                flex-direction: column; gap: 6px; padding: 6px;
             }
             .email-form input[type="email"] { text-align: center; }
             .email-form button { width: 100%; }
-            .features { gap: 6px; }
-            .feature-pill { font-size: 0.76rem; padding: 6px 14px; }
+            .chips { gap: 6px; }
+            .chip { font-size: 0.74rem; padding: 6px 14px; }
+            .rotating-wrapper { width: 4.8em; }
+            .proof { flex-direction: column; gap: 8px; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-noise"></div>
-    <div class="bg-gradient"></div>
-    <div class="bg-gradient-2"></div>
+    <!-- BG System -->
+    <div class="bg-mesh">
+        <div class="mesh-orb o1"></div>
+        <div class="mesh-orb o2"></div>
+        <div class="mesh-orb o3"></div>
+        <div class="mesh-orb o4"></div>
+    </div>
+    <div class="bg-grain"></div>
+    <canvas id="constellation"></canvas>
 
-    <main class="content">
-        <div class="logo-mark"><span>N</span></div>
-
-        <div class="badge">
-            <span class="badge-dot"></span>
-            <span>Building in stealth</span>
+    <!-- Topbar -->
+    <nav class="topbar">
+        <div class="topbar-logo">
+            <div class="topbar-icon">N</div>
+            <span class="topbar-name">The Nexus</span>
         </div>
+        <div class="topbar-status">
+            <span class="status-dot"></span>
+            <span>Building</span>
+        </div>
+    </nav>
 
-        <div class="headline">
+    <!-- Hero -->
+    <main class="page">
+        <section class="hero">
+            <div class="hero-badge">
+                <span class="status-dot"></span>
+                Stealth Mode
+            </div>
+
             <h1>
-                The world is shifting.<br>
-                This is the
-                <span class="rotating-wrapper">
-                    <span class="rotating-word active">response.</span>
-                    <span class="rotating-word">inflection.</span>
-                    <span class="rotating-word">advantage.</span>
-                    <span class="rotating-word">catalyst.</span>
-                    <span class="rotating-word">signal.</span>
+                <span class="line">The world is shifting.</span>
+                <span class="line rotating-line">
+                    This is the&nbsp;
+                    <span class="rotating-wrapper">
+                        <span class="rotating-word active">response.</span>
+                        <span class="rotating-word">inflection.</span>
+                        <span class="rotating-word">advantage.</span>
+                        <span class="rotating-word">catalyst.</span>
+                        <span class="rotating-word">signal.</span>
+                    </span>
                 </span>
             </h1>
+
+            <p class="hero-sub">
+                At the intersection of intelligence and instinct &mdash;
+                something is being forged that connects what was never connected,
+                moves before you ask, and changes what you thought was possible.
+            </p>
+        </section>
+
+        <div class="chips">
+            <span class="chip">Thinks ahead</span>
+            <span class="chip">Switches context in a blink</span>
+            <span class="chip">Connects the invisible</span>
+            <span class="chip">Bridges decisions &amp; data</span>
+            <span class="chip">Amplifies human intent</span>
         </div>
 
-        <p class="subtext">
-            Something is being built at the intersection of intelligence and instinct.
-            It connects what was never connected. It moves before you ask.
-            And it changes how you think about what's possible.
-        </p>
-
-        <div class="features">
-            <div class="feature-pill">Thinks ahead</div>
-            <div class="feature-pill">Switches context instantly</div>
-            <div class="feature-pill">Connects the invisible</div>
-            <div class="feature-pill">Bridges decisions &amp; data</div>
-            <div class="feature-pill">Amplifies human intent</div>
-        </div>
-
-        <div class="subscribe-section">
-            <p class="label">Get notified at launch</p>
+        <div class="subscribe">
+            <p class="lbl">Get the signal at launch</p>
             <form class="email-form" id="subscribeForm">
                 <input
                     type="email"
@@ -477,150 +556,239 @@
                     autocomplete="email"
                     aria-label="Email address"
                 >
-                <button type="submit" id="submitBtn">Join the waitlist</button>
+                <button type="submit" id="submitBtn">Join Waitlist</button>
             </form>
-            <p class="form-note">No spam. Just the signal when it drops.</p>
+            <p class="form-note">No spam. One email when it drops.</p>
             <p class="form-message" id="formMessage"></p>
         </div>
 
-        <div class="phrase-bar">
-            <div class="phrase-bar-header">
-                <div class="phrase-dot r"></div>
-                <div class="phrase-dot y"></div>
-                <div class="phrase-dot g"></div>
-                <span class="phrase-bar-title">nexus</span>
+        <div class="term-card">
+            <div class="term-head">
+                <div class="td r"></div>
+                <div class="td y"></div>
+                <div class="td g"></div>
+                <span class="term-title">nexus</span>
             </div>
-            <div class="phrase-bar-body" id="phraseBody">
+            <div class="term-body" id="termBody">
                 <span class="cursor"></span>
             </div>
         </div>
+
+        <div class="proof">
+            <div class="avatar-stack">
+                <div class="avatar a1"></div>
+                <div class="avatar a2"></div>
+                <div class="avatar a3"></div>
+                <div class="avatar plus">+</div>
+            </div>
+            <p class="proof-text"><strong>Early believers</strong> already on the list</p>
+        </div>
     </main>
 
-    <footer class="footer">
-        &copy; 2026 The Nexus &middot; Something extraordinary is taking shape.
+    <footer class="foot">
+        &copy; 2026 The Nexus &middot; Something extraordinary is converging.
     </footer>
 
     <script>
-        // ---- Rotating Words ----
+        /* ======== CONSTELLATION PARTICLE SYSTEM ======== */
+        const cvs = document.getElementById('constellation');
+        const c = cvs.getContext('2d');
+        let W, H, pts = [], mouse = { x: -1000, y: -1000 };
+        const N = 80, LINK = 140, MOUSE_R = 180;
+
+        function resize() { W = cvs.width = innerWidth; H = cvs.height = innerHeight; }
+        resize();
+        addEventListener('resize', resize);
+        addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        addEventListener('mouseleave', () => { mouse.x = -1000; mouse.y = -1000; });
+
+        class Pt {
+            constructor() {
+                this.x = Math.random() * W;
+                this.y = Math.random() * H;
+                this.vx = (Math.random() - 0.5) * 0.25;
+                this.vy = (Math.random() - 0.5) * 0.25;
+                this.r = Math.random() * 1.5 + 0.5;
+                this.base = Math.random() * 0.3 + 0.08;
+            }
+            update() {
+                // mouse repulsion
+                const dx = this.x - mouse.x, dy = this.y - mouse.y;
+                const dm = Math.sqrt(dx*dx + dy*dy);
+                if (dm < MOUSE_R) {
+                    const f = (MOUSE_R - dm) / MOUSE_R * 0.015;
+                    this.vx += dx * f;
+                    this.vy += dy * f;
+                }
+                this.vx *= 0.99; this.vy *= 0.99;
+                this.x += this.vx; this.y += this.vy;
+                if (this.x < 0 || this.x > W) this.vx *= -1;
+                if (this.y < 0 || this.y > H) this.vy *= -1;
+            }
+            draw() {
+                c.beginPath();
+                c.arc(this.x, this.y, this.r, 0, Math.PI*2);
+                c.fillStyle = `rgba(249,115,22,${this.base})`;
+                c.fill();
+            }
+        }
+
+        for (let i = 0; i < N; i++) pts.push(new Pt());
+
+        function links() {
+            for (let i = 0; i < pts.length; i++) {
+                for (let j = i+1; j < pts.length; j++) {
+                    const dx = pts[i].x - pts[j].x;
+                    const dy = pts[i].y - pts[j].y;
+                    const d = Math.sqrt(dx*dx + dy*dy);
+                    if (d < LINK) {
+                        const a = 0.06 * (1 - d/LINK);
+                        c.beginPath();
+                        c.moveTo(pts[i].x, pts[i].y);
+                        c.lineTo(pts[j].x, pts[j].y);
+                        c.strokeStyle = `rgba(249,115,22,${a})`;
+                        c.lineWidth = 0.5;
+                        c.stroke();
+                    }
+                }
+                // mouse links
+                const mdx = pts[i].x - mouse.x;
+                const mdy = pts[i].y - mouse.y;
+                const md = Math.sqrt(mdx*mdx + mdy*mdy);
+                if (md < MOUSE_R) {
+                    const a = 0.12 * (1 - md/MOUSE_R);
+                    c.beginPath();
+                    c.moveTo(pts[i].x, pts[i].y);
+                    c.lineTo(mouse.x, mouse.y);
+                    c.strokeStyle = `rgba(168,85,247,${a})`;
+                    c.lineWidth = 0.8;
+                    c.stroke();
+                }
+            }
+        }
+
+        function loop() {
+            c.clearRect(0, 0, W, H);
+            pts.forEach(p => { p.update(); p.draw(); });
+            links();
+            requestAnimationFrame(loop);
+        }
+        loop();
+
+        /* ======== ROTATING WORDS ======== */
         const words = document.querySelectorAll('.rotating-word');
-        let currentWord = 0;
+        let cw = 0;
         setInterval(() => {
-            words[currentWord].classList.remove('active');
-            words[currentWord].classList.add('exit');
-            const prev = currentWord;
+            words[cw].classList.remove('active');
+            words[cw].classList.add('exit');
+            const prev = cw;
             setTimeout(() => {
                 words[prev].classList.remove('exit');
-                currentWord = (currentWord + 1) % words.length;
-                words[currentWord].classList.add('active');
-            }, 400);
+                cw = (cw + 1) % words.length;
+                words[cw].classList.add('active');
+            }, 450);
         }, 2800);
 
-        // ---- Phrase Typing Effect ----
-        const lines = [
-            { type: 'prompt', text: '> ' },
-            { type: 'cmd', text: 'nexus.init()' },
-            { type: 'newline' },
-            { type: 'out', text: '\u2713 Pattern engine online' },
-            { type: 'newline' },
-            { type: 'out', text: '\u2713 Context layer synced' },
-            { type: 'newline' },
-            { type: 'out', text: '\u2713 Decision bridge active' },
-            { type: 'newline' },
-            { type: 'out', text: '\u2713 Intelligence: adaptive' },
-            { type: 'newline' },
-            { type: 'newline' },
-            { type: 'prompt', text: '> ' },
-            { type: 'cmd', text: 'nexus.status()' },
-            { type: 'newline' },
-            { type: 'out', text: '\u2728 All systems converging. Launch imminent.' },
+        /* ======== TERMINAL TYPING ======== */
+        const tlines = [
+            { t: 'p', s: '> ' },
+            { t: 'c', s: 'nexus.init()' },
+            { t: 'n' },
+            { t: 'o', s: '\u2713 Pattern engine online' },
+            { t: 'n' },
+            { t: 'o', s: '\u2713 Context layer synced' },
+            { t: 'n' },
+            { t: 'o', s: '\u2713 Decision bridge: active' },
+            { t: 'n' },
+            { t: 'o', s: '\u2713 Intelligence mode: adaptive' },
+            { t: 'n' },
+            { t: 'n' },
+            { t: 'p', s: '> ' },
+            { t: 'c', s: 'nexus.status()' },
+            { t: 'n' },
+            { t: 'o', s: '\u2728 All systems converging. Launch imminent.' },
         ];
 
-        const body = document.getElementById('phraseBody');
-        let li = 0, ci = 0;
+        const tb = document.getElementById('termBody');
+        let tli = 0, tci = 0;
 
-        function typePhrase() {
-            if (li >= lines.length) {
-                const c = document.createElement('span');
-                c.className = 'cursor';
-                body.appendChild(c);
+        function typeT() {
+            if (tli >= tlines.length) {
+                const cr = document.createElement('span');
+                cr.className = 'cursor';
+                tb.appendChild(cr);
                 return;
             }
-            const ln = lines[li];
-            if (ln.type === 'newline') {
-                removeCursor();
-                body.appendChild(document.createElement('br'));
-                li++; ci = 0;
-                setTimeout(typePhrase, 80);
+            const ln = tlines[tli];
+            if (ln.t === 'n') {
+                rmCur(); tb.appendChild(document.createElement('br'));
+                tli++; tci = 0;
+                setTimeout(typeT, 70);
                 return;
             }
-            if (ci === 0) {
-                removeCursor();
+            if (tci === 0) {
+                rmCur();
                 const s = document.createElement('span');
-                s.className = ln.type;
-                s.id = 'ln-' + li;
-                body.appendChild(s);
+                s.className = ln.t;
+                s.id = 'tl' + tli;
+                tb.appendChild(s);
             }
-            const s = document.getElementById('ln-' + li);
-            if (ci < ln.text.length) {
-                s.textContent += ln.text[ci];
-                ci++;
-                removeCursor();
-                const c = document.createElement('span');
-                c.className = 'cursor';
-                body.appendChild(c);
-                setTimeout(typePhrase, ln.type === 'cmd' ? 50 : 18);
+            const sp = document.getElementById('tl' + tli);
+            if (tci < ln.s.length) {
+                sp.textContent += ln.s[tci];
+                tci++;
+                rmCur();
+                const cr = document.createElement('span');
+                cr.className = 'cursor';
+                tb.appendChild(cr);
+                setTimeout(typeT, ln.t === 'c' ? 48 : 16);
             } else {
-                li++; ci = 0;
-                setTimeout(typePhrase, ln.type === 'cmd' ? 350 : 60);
+                tli++; tci = 0;
+                setTimeout(typeT, ln.t === 'c' ? 350 : 55);
             }
         }
 
-        function removeCursor() {
-            const c = body.querySelector('.cursor');
-            if (c) c.remove();
+        function rmCur() {
+            const x = tb.querySelector('.cursor');
+            if (x) x.remove();
         }
 
-        setTimeout(typePhrase, 1200);
+        setTimeout(typeT, 1400);
 
-        // ---- Email Subscription ----
+        /* ======== EMAIL SUBSCRIBE ======== */
         const form = document.getElementById('subscribeForm');
-        const emailInput = document.getElementById('emailInput');
-        const submitBtn = document.getElementById('submitBtn');
-        const formMessage = document.getElementById('formMessage');
+        const inp = document.getElementById('emailInput');
+        const btn = document.getElementById('submitBtn');
+        const msg = document.getElementById('formMessage');
 
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', e => {
             e.preventDefault();
-            const email = emailInput.value.trim();
+            const email = inp.value.trim();
             if (!email) return;
-
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(email)) {
-                formMessage.textContent = 'Please enter a valid email.';
-                formMessage.className = 'form-message error';
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                msg.textContent = 'Please enter a valid email.';
+                msg.className = 'form-message error';
                 return;
             }
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Joining...';
-
+            btn.disabled = true;
+            btn.textContent = 'Joining...';
             setTimeout(() => {
-                const subs = JSON.parse(localStorage.getItem('nexus_waitlist') || '[]');
-                if (subs.includes(email)) {
-                    formMessage.textContent = "You're already on the list. We'll be in touch.";
-                    formMessage.className = 'form-message success';
+                const list = JSON.parse(localStorage.getItem('nexus_waitlist') || '[]');
+                if (list.includes(email)) {
+                    msg.textContent = "You're already on the list.";
                 } else {
-                    subs.push(email);
-                    localStorage.setItem('nexus_waitlist', JSON.stringify(subs));
-                    formMessage.textContent = "You're in. We'll send the signal.";
-                    formMessage.className = 'form-message success';
+                    list.push(email);
+                    localStorage.setItem('nexus_waitlist', JSON.stringify(list));
+                    msg.textContent = "You're in. We'll send the signal.";
                 }
-                submitBtn.textContent = '\u2713 On the list';
-                submitBtn.classList.add('success');
-                emailInput.value = '';
+                msg.className = 'form-message success';
+                btn.textContent = '\u2713 On the list';
+                btn.classList.add('success');
+                inp.value = '';
                 setTimeout(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Join the waitlist';
-                    submitBtn.classList.remove('success');
+                    btn.disabled = false;
+                    btn.textContent = 'Join Waitlist';
+                    btn.classList.remove('success');
                 }, 3000);
             }, 700);
         });
