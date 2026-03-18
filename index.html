@@ -3,113 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Something Big is Coming</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>The Nexus &mdash; Something is Coming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --accent-cyan: #00f0ff;
-            --accent-purple: #a855f7;
-            --accent-blue: #3b82f6;
-            --accent-pink: #ec4899;
-            --text-primary: #f0f0f5;
-            --text-secondary: #8888a0;
-            --text-dim: #55556a;
-            --glow-cyan: rgba(0, 240, 255, 0.15);
-            --glow-purple: rgba(168, 85, 247, 0.15);
+            --bg: #fafaf9;
+            --bg-card: #ffffff;
+            --accent: #18181b;
+            --accent-warm: #d97706;
+            --accent-rose: #e11d48;
+            --accent-violet: #7c3aed;
+            --gradient-warm: linear-gradient(135deg, #f59e0b, #ef4444, #ec4899);
+            --gradient-cool: linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4);
+            --text-primary: #18181b;
+            --text-secondary: #52525b;
+            --text-muted: #a1a1aa;
+            --border: #e4e4e7;
+            --border-hover: #d4d4d8;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
+            font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
             color: var(--text-primary);
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* ---- Animated Background ---- */
-        .bg-grid {
+        /* ---- Subtle Background ---- */
+        .bg-noise {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: gridMove 20s linear infinite;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            pointer-events: none;
         }
 
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(60px, 60px); }
-        }
-
-        .bg-orbs {
+        .bg-gradient {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: -30%; right: -20%;
+            width: 700px; height: 700px;
+            background: radial-gradient(circle, rgba(249,115,22,0.06), transparent 70%);
             z-index: 0;
             pointer-events: none;
+            animation: driftA 25s ease-in-out infinite;
         }
 
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: orbFloat 15s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, var(--accent-cyan), transparent 70%);
-            top: -10%; left: -5%;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, var(--accent-purple), transparent 70%);
-            top: 40%; right: -10%;
-            animation-delay: -5s;
-        }
-
-        .orb-3 {
-            width: 350px; height: 350px;
-            background: radial-gradient(circle, var(--accent-blue), transparent 70%);
-            bottom: -5%; left: 30%;
-            animation-delay: -10s;
-        }
-
-        @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(30px, -40px) scale(1.05); }
-            50% { transform: translate(-20px, 20px) scale(0.95); }
-            75% { transform: translate(40px, 30px) scale(1.02); }
-        }
-
-        /* ---- Canvas for particles ---- */
-        #particleCanvas {
+        .bg-gradient-2 {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 1;
+            bottom: -20%; left: -10%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(124,58,237,0.05), transparent 70%);
+            z-index: 0;
             pointer-events: none;
+            animation: driftB 30s ease-in-out infinite;
         }
 
-        /* ---- Main Content ---- */
+        @keyframes driftA {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-40px, 30px); }
+        }
+        @keyframes driftB {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -40px); }
+        }
+
+        /* ---- Layout ---- */
         .content {
             position: relative;
             z-index: 2;
@@ -119,68 +84,80 @@
             align-items: center;
             justify-content: center;
             padding: 2rem;
+            max-width: 720px;
+            margin: 0 auto;
         }
 
-        /* ---- Top Badge ---- */
+        /* ---- Logo Mark ---- */
+        .logo-mark {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            background: var(--gradient-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out 0.1s backwards;
+            box-shadow: 0 4px 24px rgba(249, 115, 22, 0.15);
+        }
+
+        .logo-mark span {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* ---- Badge ---- */
         .badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 20px;
+            padding: 6px 16px;
             border-radius: 100px;
-            background: rgba(0, 240, 255, 0.06);
-            border: 1px solid rgba(0, 240, 255, 0.15);
-            font-size: 0.8rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
-            color: var(--accent-cyan);
-            margin-bottom: 2.5rem;
-            animation: fadeInDown 1s ease-out 0.2s backwards;
+            color: #92400e;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out 0.2s backwards;
         }
 
         .badge-dot {
             width: 6px; height: 6px;
-            background: var(--accent-cyan);
+            background: #f59e0b;
             border-radius: 50%;
             animation: pulse 2s ease-in-out infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.4); }
-            50% { opacity: 0.6; box-shadow: 0 0 0 8px rgba(0, 240, 255, 0); }
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.3); }
+            50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
         }
 
         /* ---- Headline ---- */
         .headline {
             text-align: center;
             margin-bottom: 1.5rem;
-            animation: fadeInUp 1s ease-out 0.4s backwards;
+            animation: fadeInUp 0.8s ease-out 0.3s backwards;
         }
 
         .headline h1 {
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 900;
-            line-height: 1.05;
+            font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+            font-weight: 800;
+            line-height: 1.1;
             letter-spacing: -0.03em;
-        }
-
-        .headline h1 .line-1 {
-            display: block;
             color: var(--text-primary);
         }
 
-        .headline h1 .line-2 {
-            display: block;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+        .headline h1 .gradient-text {
+            background: var(--gradient-warm);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-        }
-
-        .headline h1 .line-3 {
-            display: block;
-            color: var(--text-primary);
         }
 
         /* ---- Rotating Words ---- */
@@ -189,8 +166,8 @@
             position: relative;
             overflow: hidden;
             vertical-align: bottom;
-            height: 1.1em;
-            min-width: 280px;
+            height: 1.15em;
+            min-width: 200px;
         }
 
         .rotating-word {
@@ -198,7 +175,7 @@
             position: absolute;
             width: 100%;
             left: 0;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            background: var(--gradient-cool);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -220,17 +197,13 @@
         /* ---- Subtext ---- */
         .subtext {
             text-align: center;
-            max-width: 600px;
+            max-width: 520px;
             color: var(--text-secondary);
-            font-size: 1.15rem;
-            line-height: 1.7;
-            margin-bottom: 3rem;
-            animation: fadeInUp 1s ease-out 0.6s backwards;
-        }
-
-        .subtext strong {
-            color: var(--text-primary);
-            font-weight: 600;
+            font-size: 1.1rem;
+            line-height: 1.75;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease-out 0.5s backwards;
         }
 
         /* ---- Feature Pills ---- */
@@ -238,66 +211,61 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 3.5rem;
-            animation: fadeInUp 1s ease-out 0.8s backwards;
+            gap: 10px;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.65s backwards;
         }
 
         .feature-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            font-size: 0.88rem;
+            padding: 8px 18px;
+            border-radius: 100px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            font-size: 0.82rem;
+            font-weight: 500;
             color: var(--text-secondary);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
         }
 
         .feature-pill:hover {
-            border-color: rgba(0, 240, 255, 0.2);
-            background: rgba(0, 240, 255, 0.04);
+            border-color: var(--accent-warm);
             color: var(--text-primary);
-            transform: translateY(-2px);
-        }
-
-        .feature-pill .icon {
-            font-size: 1.1rem;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
         }
 
         /* ---- Email Form ---- */
         .subscribe-section {
             text-align: center;
-            animation: fadeInUp 1s ease-out 1s backwards;
+            width: 100%;
+            animation: fadeInUp 0.8s ease-out 0.8s backwards;
         }
 
         .subscribe-section .label {
-            font-size: 0.85rem;
-            color: var(--text-dim);
+            font-size: 0.78rem;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.15em;
+            font-weight: 600;
             margin-bottom: 1rem;
         }
 
         .email-form {
             display: flex;
             align-items: center;
-            gap: 0;
-            max-width: 480px;
+            max-width: 440px;
             margin: 0 auto;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 6px;
+            border-radius: 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 5px;
             transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
 
         .email-form:focus-within {
-            border-color: rgba(0, 240, 255, 0.3);
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.08);
+            border-color: #d97706;
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
         }
 
         .email-form input[type="email"] {
@@ -305,34 +273,33 @@
             background: transparent;
             border: none;
             outline: none;
-            padding: 14px 18px;
-            font-size: 0.95rem;
+            padding: 12px 16px;
+            font-size: 0.92rem;
             color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Sora', sans-serif;
         }
 
         .email-form input[type="email"]::placeholder {
-            color: var(--text-dim);
+            color: var(--text-muted);
         }
 
         .email-form button {
-            padding: 14px 28px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-            color: #000;
+            padding: 12px 24px;
+            background: var(--text-primary);
+            color: #fff;
             border: none;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            font-family: 'Inter', sans-serif;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: 'Sora', sans-serif;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             white-space: nowrap;
-            letter-spacing: 0.02em;
         }
 
         .email-form button:hover {
-            transform: scale(1.03);
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+            background: #3f3f46;
+            transform: scale(1.02);
         }
 
         .email-form button:active {
@@ -340,89 +307,79 @@
         }
 
         .email-form button.success {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: #059669;
         }
 
         .form-note {
-            margin-top: 0.8rem;
-            font-size: 0.75rem;
-            color: var(--text-dim);
+            margin-top: 0.75rem;
+            font-size: 0.72rem;
+            color: var(--text-muted);
         }
 
         .form-message {
-            margin-top: 1rem;
-            font-size: 0.9rem;
+            margin-top: 0.8rem;
+            font-size: 0.85rem;
             min-height: 1.5em;
+            font-weight: 500;
         }
 
-        .form-message.success { color: #10b981; }
-        .form-message.error { color: #ef4444; }
+        .form-message.success { color: #059669; }
+        .form-message.error { color: #dc2626; }
 
-        /* ---- Typing Terminal ---- */
-        .terminal {
-            margin-top: 4rem;
-            max-width: 600px;
+        /* ---- Animated Phrase Bar ---- */
+        .phrase-bar {
+            margin-top: 3.5rem;
             width: 100%;
+            max-width: 520px;
             border-radius: 16px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             overflow: hidden;
-            animation: fadeInUp 1s ease-out 1.2s backwards;
-            backdrop-filter: blur(20px);
+            animation: fadeInUp 0.8s ease-out 1s backwards;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
 
-        .terminal-header {
+        .phrase-bar-header {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .terminal-dot {
-            width: 10px; height: 10px;
+        .phrase-dot {
+            width: 8px; height: 8px;
             border-radius: 50%;
         }
+        .phrase-dot.r { background: #fca5a5; }
+        .phrase-dot.y { background: #fde68a; }
+        .phrase-dot.g { background: #86efac; }
 
-        .terminal-dot.red { background: #ff5f56; }
-        .terminal-dot.yellow { background: #ffbd2e; }
-        .terminal-dot.green { background: #27c93f; }
-
-        .terminal-title {
+        .phrase-bar-title {
             flex: 1;
             text-align: center;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 0.05em;
         }
 
-        .terminal-body {
-            padding: 20px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
-            line-height: 1.8;
+        .phrase-bar-body {
+            padding: 20px 22px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.9;
             color: var(--text-secondary);
-            min-height: 160px;
+            min-height: 140px;
         }
 
-        .terminal-body .prompt {
-            color: var(--accent-cyan);
-        }
-
-        .terminal-body .command {
-            color: var(--text-primary);
-        }
-
-        .terminal-body .output {
-            color: var(--accent-purple);
-        }
-
-        .terminal-body .cursor {
+        .phrase-bar-body .prompt { color: var(--accent-warm); font-weight: 700; }
+        .phrase-bar-body .cmd { color: var(--text-primary); }
+        .phrase-bar-body .out { color: var(--accent-violet); }
+        .phrase-bar-body .cursor {
             display: inline-block;
-            width: 8px;
-            height: 1.1em;
-            background: var(--accent-cyan);
+            width: 8px; height: 1.1em;
+            background: var(--text-primary);
             vertical-align: text-bottom;
             animation: blink 1s step-end infinite;
         }
@@ -438,64 +395,44 @@
             z-index: 2;
             text-align: center;
             padding: 3rem 2rem 2rem;
-            color: var(--text-dim);
-            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            letter-spacing: 0.02em;
         }
 
         /* ---- Animations ---- */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(24px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
+            from { opacity: 0; transform: translateY(-16px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         /* ---- Responsive ---- */
         @media (max-width: 640px) {
+            .content { padding: 2rem 1.25rem; }
             .email-form {
                 flex-direction: column;
-                gap: 8px;
-                padding: 8px;
+                gap: 6px;
+                padding: 6px;
             }
-
-            .email-form input[type="email"] {
-                text-align: center;
-            }
-
-            .email-form button {
-                width: 100%;
-            }
-
-            .features {
-                gap: 8px;
-            }
-
-            .feature-pill {
-                font-size: 0.8rem;
-                padding: 8px 14px;
-            }
-
-            .terminal {
-                margin-top: 3rem;
-            }
+            .email-form input[type="email"] { text-align: center; }
+            .email-form button { width: 100%; }
+            .features { gap: 6px; }
+            .feature-pill { font-size: 0.76rem; padding: 6px 14px; }
         }
     </style>
 </head>
 <body>
-    <!-- Background layers -->
-    <div class="bg-grid"></div>
-    <div class="bg-orbs">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-    <canvas id="particleCanvas"></canvas>
+    <div class="bg-noise"></div>
+    <div class="bg-gradient"></div>
+    <div class="bg-gradient-2"></div>
 
-    <!-- Main Content -->
     <main class="content">
+        <div class="logo-mark"><span>N</span></div>
+
         <div class="badge">
             <span class="badge-dot"></span>
             <span>Building in stealth</span>
@@ -503,225 +440,147 @@
 
         <div class="headline">
             <h1>
-                <span class="line-1">Intelligence that's</span>
-                <span class="line-2">
-                    <span class="rotating-wrapper">
-                        <span class="rotating-word active">Proactive</span>
-                        <span class="rotating-word">Context-Aware</span>
-                        <span class="rotating-word">Business-Connected</span>
-                        <span class="rotating-word">Lightning Fast</span>
-                        <span class="rotating-word">Always Watching</span>
-                    </span>
+                The world is shifting.<br>
+                This is the
+                <span class="rotating-wrapper">
+                    <span class="rotating-word active">response.</span>
+                    <span class="rotating-word">inflection.</span>
+                    <span class="rotating-word">advantage.</span>
+                    <span class="rotating-word">catalyst.</span>
+                    <span class="rotating-word">signal.</span>
                 </span>
-                <span class="line-3">not just reactive.</span>
             </h1>
         </div>
 
         <p class="subtext">
-            Where <strong>tech meets business</strong> in real-time &mdash; an AI-native platform that 
-            switches context in a blink, connects the dots across your stack, 
-            and <strong>lifts the entire game</strong>.
+            Something is being built at the intersection of intelligence and instinct.
+            It connects what was never connected. It moves before you ask.
+            And it changes how you think about what's possible.
         </p>
 
         <div class="features">
-            <div class="feature-pill"><span class="icon">&#9889;</span> Instant Context Switching</div>
-            <div class="feature-pill"><span class="icon">&#129504;</span> AI-Native Intelligence</div>
-            <div class="feature-pill"><span class="icon">&#128279;</span> Tech &#8596; Business Bridge</div>
-            <div class="feature-pill"><span class="icon">&#128737;&#65039;</span> Proactive, Not Reactive</div>
-            <div class="feature-pill"><span class="icon">&#128225;</span> Real-Time Observability</div>
+            <div class="feature-pill">Thinks ahead</div>
+            <div class="feature-pill">Switches context instantly</div>
+            <div class="feature-pill">Connects the invisible</div>
+            <div class="feature-pill">Bridges decisions &amp; data</div>
+            <div class="feature-pill">Amplifies human intent</div>
         </div>
 
         <div class="subscribe-section">
-            <p class="label">Be the first to know</p>
+            <p class="label">Get notified at launch</p>
             <form class="email-form" id="subscribeForm">
-                <input 
-                    type="email" 
+                <input
+                    type="email"
                     id="emailInput"
-                    placeholder="Enter your email" 
+                    placeholder="you@email.com"
                     required
                     autocomplete="email"
                     aria-label="Email address"
                 >
-                <button type="submit" id="submitBtn">Notify Me</button>
+                <button type="submit" id="submitBtn">Join the waitlist</button>
             </form>
-            <p class="form-note">No spam, ever. Just the launch signal.</p>
+            <p class="form-note">No spam. Just the signal when it drops.</p>
             <p class="form-message" id="formMessage"></p>
         </div>
 
-        <div class="terminal">
-            <div class="terminal-header">
-                <div class="terminal-dot red"></div>
-                <div class="terminal-dot yellow"></div>
-                <div class="terminal-dot green"></div>
-                <span class="terminal-title">console</span>
+        <div class="phrase-bar">
+            <div class="phrase-bar-header">
+                <div class="phrase-dot r"></div>
+                <div class="phrase-dot y"></div>
+                <div class="phrase-dot g"></div>
+                <span class="phrase-bar-title">nexus</span>
             </div>
-            <div class="terminal-body" id="terminalBody">
+            <div class="phrase-bar-body" id="phraseBody">
                 <span class="cursor"></span>
             </div>
         </div>
     </main>
 
     <footer class="footer">
-        &copy; 2026 &middot; Something extraordinary is being forged.
+        &copy; 2026 The Nexus &middot; Something extraordinary is taking shape.
     </footer>
 
     <script>
-        // ---- Particle System ----
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        const PARTICLE_COUNT = 60;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        class Particle {
-            constructor() { this.reset(); }
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.3;
-                this.vy = (Math.random() - 0.5) * 0.3;
-                this.radius = Math.random() * 1.5 + 0.5;
-                this.opacity = Math.random() * 0.3 + 0.1;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(0, 240, 255, ${this.opacity})`;
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
-            particles.push(new Particle());
-        }
-
-        function drawConnections() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 150) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.06 * (1 - dist / 150)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            drawConnections();
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-
         // ---- Rotating Words ----
         const words = document.querySelectorAll('.rotating-word');
         let currentWord = 0;
         setInterval(() => {
             words[currentWord].classList.remove('active');
             words[currentWord].classList.add('exit');
+            const prev = currentWord;
             setTimeout(() => {
-                words[currentWord].classList.remove('exit');
+                words[prev].classList.remove('exit');
                 currentWord = (currentWord + 1) % words.length;
                 words[currentWord].classList.add('active');
             }, 400);
-        }, 2500);
+        }, 2800);
 
-        // ---- Terminal Typing Effect ----
-        const terminalLines = [
-            { type: 'prompt', text: '~ ' },
-            { type: 'command', text: 'init --mode=intelligent' },
+        // ---- Phrase Typing Effect ----
+        const lines = [
+            { type: 'prompt', text: '> ' },
+            { type: 'cmd', text: 'nexus.init()' },
             { type: 'newline' },
-            { type: 'output', text: '\u2713 Neural context engine loaded' },
+            { type: 'out', text: '\u2713 Pattern engine online' },
             { type: 'newline' },
-            { type: 'output', text: '\u2713 Business-tech bridge established' },
+            { type: 'out', text: '\u2713 Context layer synced' },
             { type: 'newline' },
-            { type: 'output', text: '\u2713 Proactive monitoring: ARMED' },
+            { type: 'out', text: '\u2713 Decision bridge active' },
             { type: 'newline' },
-            { type: 'output', text: '\u2713 Context switch latency: <50ms' },
+            { type: 'out', text: '\u2713 Intelligence: adaptive' },
             { type: 'newline' },
             { type: 'newline' },
-            { type: 'prompt', text: '~ ' },
-            { type: 'command', text: 'status' },
+            { type: 'prompt', text: '> ' },
+            { type: 'cmd', text: 'nexus.status()' },
             { type: 'newline' },
-            { type: 'output', text: '\u26A1 All systems nominal. Waiting for launch.' },
-            { type: 'newline' },
-            { type: 'output', text: '\uD83D\uDE80 ETA: Coming Soon...' },
+            { type: 'out', text: '\u2728 All systems converging. Launch imminent.' },
         ];
 
-        const terminalBody = document.getElementById('terminalBody');
-        let lineIndex = 0;
-        let charIndex = 0;
+        const body = document.getElementById('phraseBody');
+        let li = 0, ci = 0;
 
-        function typeTerminal() {
-            if (lineIndex >= terminalLines.length) {
-                const cursor = document.createElement('span');
-                cursor.className = 'cursor';
-                terminalBody.appendChild(cursor);
+        function typePhrase() {
+            if (li >= lines.length) {
+                const c = document.createElement('span');
+                c.className = 'cursor';
+                body.appendChild(c);
                 return;
             }
-
-            const line = terminalLines[lineIndex];
-
-            if (line.type === 'newline') {
+            const ln = lines[li];
+            if (ln.type === 'newline') {
                 removeCursor();
-                terminalBody.appendChild(document.createElement('br'));
-                lineIndex++;
-                charIndex = 0;
-                setTimeout(typeTerminal, 100);
+                body.appendChild(document.createElement('br'));
+                li++; ci = 0;
+                setTimeout(typePhrase, 80);
                 return;
             }
-
-            if (charIndex === 0) {
+            if (ci === 0) {
                 removeCursor();
-                const span = document.createElement('span');
-                span.className = line.type;
-                span.id = 'line-' + lineIndex;
-                terminalBody.appendChild(span);
+                const s = document.createElement('span');
+                s.className = ln.type;
+                s.id = 'ln-' + li;
+                body.appendChild(s);
             }
-
-            const span = document.getElementById('line-' + lineIndex);
-            if (charIndex < line.text.length) {
-                span.textContent += line.text[charIndex];
-                charIndex++;
-                const speed = line.type === 'command' ? 45 : 15;
+            const s = document.getElementById('ln-' + li);
+            if (ci < ln.text.length) {
+                s.textContent += ln.text[ci];
+                ci++;
                 removeCursor();
-                const cursor = document.createElement('span');
-                cursor.className = 'cursor';
-                terminalBody.appendChild(cursor);
-                setTimeout(typeTerminal, speed);
+                const c = document.createElement('span');
+                c.className = 'cursor';
+                body.appendChild(c);
+                setTimeout(typePhrase, ln.type === 'cmd' ? 50 : 18);
             } else {
-                lineIndex++;
-                charIndex = 0;
-                setTimeout(typeTerminal, line.type === 'command' ? 400 : 80);
+                li++; ci = 0;
+                setTimeout(typePhrase, ln.type === 'cmd' ? 350 : 60);
             }
         }
 
         function removeCursor() {
-            const existing = terminalBody.querySelector('.cursor');
-            if (existing) existing.remove();
+            const c = body.querySelector('.cursor');
+            if (c) c.remove();
         }
 
-        setTimeout(typeTerminal, 1500);
+        setTimeout(typePhrase, 1200);
 
         // ---- Email Subscription ----
         const form = document.getElementById('subscribeForm');
@@ -731,44 +590,39 @@
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-
             const email = emailInput.value.trim();
             if (!email) return;
 
-            // Basic email validation
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(email)) {
-                formMessage.textContent = 'Please enter a valid email address.';
+                formMessage.textContent = 'Please enter a valid email.';
                 formMessage.className = 'form-message error';
                 return;
             }
 
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Subscribing...';
+            submitBtn.textContent = 'Joining...';
 
             setTimeout(() => {
-                // Store locally (replace with your backend API in production)
-                const subscribers = JSON.parse(localStorage.getItem('launch_subscribers') || '[]');
-                if (subscribers.includes(email)) {
-                    formMessage.textContent = "You're already on the list! We'll be in touch.";
+                const subs = JSON.parse(localStorage.getItem('nexus_waitlist') || '[]');
+                if (subs.includes(email)) {
+                    formMessage.textContent = "You're already on the list. We'll be in touch.";
                     formMessage.className = 'form-message success';
                 } else {
-                    subscribers.push(email);
-                    localStorage.setItem('launch_subscribers', JSON.stringify(subscribers));
-                    formMessage.textContent = "You're in! We'll notify you when we launch.";
+                    subs.push(email);
+                    localStorage.setItem('nexus_waitlist', JSON.stringify(subs));
+                    formMessage.textContent = "You're in. We'll send the signal.";
                     formMessage.className = 'form-message success';
                 }
-
-                submitBtn.textContent = '\u2713 Subscribed';
+                submitBtn.textContent = '\u2713 On the list';
                 submitBtn.classList.add('success');
                 emailInput.value = '';
-
                 setTimeout(() => {
                     submitBtn.disabled = false;
-                    submitBtn.textContent = 'Notify Me';
+                    submitBtn.textContent = 'Join the waitlist';
                     submitBtn.classList.remove('success');
                 }, 3000);
-            }, 800);
+            }, 700);
         });
     </script>
 </body>
